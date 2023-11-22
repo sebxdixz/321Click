@@ -44,7 +44,7 @@ class Empleador(db.Model):
     __tablename__ = 'empleador'
 
     rut_empleador = db.Column(db.Integer, primary_key=True)
-    nombre_empleador = db.Column(db.String(50), nullable=False)
+    nom_empleador = db.Column(db.String(50), nullable=False)
     apellido_empleador = db.Column(db.String(50), nullable=False)
     mail_empleador = db.Column(db.String(50), unique=True, nullable=False)
     contrasena_empleador = db.Column(db.String(50), nullable=False)
@@ -53,7 +53,7 @@ class Empleador(db.Model):
     def jsonEmpleador(self):
         return {
             'rut_empleador': self.rut_empleador,
-            'nombre_empleador': self.nombre_empleador,
+            'nom_empleador': self.nom_empleador,
             'apellido_empleador': self.apellido_empleador,
             'mail_empleador': self.mail_empleador,
             'contrasena_empleador': self.contrasena_empleador,
@@ -199,9 +199,9 @@ def crear_empleador():
             rut_empleador=data['rut_empleador'],
             nom_empleador=data['nom_empleador'],
             apellido_empleador=data['apellido_empleador'],
-            celular_empleador=data['celular_empleador'],
             mail_empleador=data['mail_empleador'],
-            contrasena_empleador=data['contrasena_empleador']
+            contrasena_empleador=data['contrasena_empleador'],
+            celular_empleador=data['celular_empleador']
         )
         db.session.add(new_empleador)
         db.session.commit()
