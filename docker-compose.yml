@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  flask_app:
+    container_name: flask_app
+    image: flask_app
+    build: ./backend
+    ports:
+      - "4000:4000"
+    environment:
+      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    depends_on:
+      - flask_db
+    command: sh -c "sleep 5s; python3 -m flask run --host=0.0.0.0 --port=4000"
+    networks:
+     - app_network
+  flask_db:
+    container_name: flask_db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+     - app_network
+#  front:
+#    container_name: react_app
+#    build: ./front
+#    ports:
+#     - "3000:3000"
+#    stdin_open: true
+#    tty: true
+#    volumes:
+#     - ./front:/app
+#     - modules:/app/node_modules
+#    networks:
+#     - app_network
+
+
+
+volumes:
+# modules:
+  pgdata: {}
+
+networks: 
+  app_network:
+
