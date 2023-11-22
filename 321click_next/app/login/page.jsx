@@ -14,19 +14,17 @@ function LoginPage() {
   const [error, setError] = useState(null)
   
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
 
     const res = await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     });
-
-    console.log(res)
     if (res.error) {
-      setError(res.error)
+        console.log("error")
+        setError(res.error)
     } else {
-      router.push('/')
+      router.push('/home')
       router.refresh()
     }
   });

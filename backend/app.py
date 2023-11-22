@@ -64,7 +64,7 @@ class Empleador(db.Model):
 class Trabajo(db.Model):
     __tablename__ = 'trabajo'
 
-    id_trabajo = db.Column(db.Integer, primary_key=True)
+    id_trabajo = db.Column(db.Integer, primary_key=True, autoincrement=True)
     rut_empleador1 = db.Column(db.Integer, db.ForeignKey('empleador.rut_empleador'), nullable=False)
     empleador = db.relationship('Empleador', backref='trabajos')
     nom_trabajo = db.Column(db.String(50), nullable=False)
@@ -187,7 +187,20 @@ def delete_empleado(rut_empleado):
         return make_response(jsonify({'message': 'empleado not found'}), 404)
     except Exception as e:
         return make_response(jsonify({'message': 'error deleting empleado'}), 500)
-    
+
+
+@app.route('/api/empleado/login', methods=['POST'])
+def login_empleado():
+    try:
+        data = request.get_json()
+        empleado = Empleado.query.filter_by(mail_empleado=data['email']).first()
+        if empleado:
+            if empleado.contrasena_empleado == data['password']:
+                return make_response(jsonify({'message': 'login successful'}), 200)
+            return make_response(jsonify({'message': 'wrong password'}), 401)
+        return make_response(jsonify({'message': 'empleado not found'}), 404)
+    except Exception as e:
+        return make_response(jsonify({'message': 'error logging in'}), 500)
 
 
 # EMPLEADOR
@@ -259,6 +272,19 @@ def delete_empleador(rut_empleador):
     except Exception as e:
         return make_response(jsonify({'message': 'error deleting empleador'}), 500)
 
+# Login empleador
+@app.route('/api/empleador/login', methods=['POST'])
+def login_empleador():
+    try:
+        data = request.get_json()
+        empleador = Empleador.query.filter_by(mail_empleador=data['email']).first()
+        if empleador:
+            if empleador.contrasena_empleador == data['password']:
+                return make_response(jsonify({'message': 'login successful'}), 200)
+            return make_response(jsonify({'message': 'wrong password'}), 401)
+        return make_response(jsonify({'message': 'empleador not found'}), 404)
+    except Exception as e:
+        return make_response(jsonify({'message': 'error logging in'}), 500)
 
 
 # TRABAJO
