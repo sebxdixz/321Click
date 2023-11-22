@@ -267,13 +267,14 @@ def crear_trabajo():
     try:
         data = request.get_json()
         new_trabajo = Trabajo(
-            id_trabajo=data['id_trabajo'],
+            id_trabajo=data["id_trabajo"],
             nom_trabajo=data['nom_trabajo'],
-            desc_trabajo=data['desc_trabajo'],
-            remuneracion=data['remuneracion'],
-            fecha_trabajo=data['fecha_trabajo'],
-            horario=data['horario'],
-            rut_empleador=data['rut_empleador']
+            descripcion_trabajo=data['descripcion_trabajo'],
+            pago=data['pago'],
+            fecha_comienzo=data['fecha_comienzo'],
+            fecha_final=data['fecha_final'],
+            rut_empleador1=data['rut_empleador'],
+            estado_trabajo=data['estado_trabajo']
         )
         db.session.add(new_trabajo)
         db.session.commit()
@@ -282,7 +283,6 @@ def crear_trabajo():
         return make_response(jsonify({'message': 'error creating trabajo'}), 500)
 
 
-# TRABAJO
 
 # Obtener todos los trabajos
 @app.route('/trabajo', methods=['GET'])

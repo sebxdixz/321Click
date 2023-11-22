@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
+
 function RegisterPage() {
   const {
     register,
@@ -11,16 +12,18 @@ function RegisterPage() {
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
-    if (data.password !== data.confirmPassword) {
-      return alert("Passwords do not match");
-    }
 
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch("localhost:4000/trabajo", {
       method: "POST",
       body: JSON.stringify({
-        username: data.username,
-        email: data.email,
-        password: data.password,
+        nom_trabajo: data.nom_trabajo,
+        desc_trabajo: data.descripcion_trabajo,
+        pago: data.pago,
+        estado:"Disponible",
+        rut_empleador1:208331302,
+        fecha_comienzo: data.fecha_comienzo,
+        fecha_final:data.fecha_final
+
       }),
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +31,7 @@ function RegisterPage() {
     });
 
     if (res.ok) {
-      router.push("/auth/login");
+      router.push("/trabajo");
     }
   });
 
@@ -37,95 +40,97 @@ function RegisterPage() {
   return (
     <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
       <form onSubmit={onSubmit} className="w-1/4">
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">Register</h1>
+        <h1 className="text-slate-200 font-bold text-4xl mb-4">Publica un nuevo trabajo</h1>
 
-        <label htmlFor="username" className="text-slate-500 mb-2 block text-sm">
-          Username:
+        <label htmlFor="nom_trabajo" className="text-slate-500 mb-2 block text-sm">
+          nombre del trabajo:
         </label>
         <input
           type="text"
           {...register("username", {
             required: {
               value: true,
-              message: "Username is required",
+              message: "Campo requerido",
             },
           })}
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="yourUser123"
+          placeholder="trabajo X"
         />
 
-        {errors.username && (
-          <span className="text-red-500 text-xs">
-            {errors.username.message}
-          </span>
-        )}
 
-        <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
-          Email:
+
+        <label htmlFor="desc_trabajo" className="text-slate-500 mb-2 block text-sm">
+          descripcion del trabajo:
         </label>
         <input
-          type="email"
-          {...register("email", {
+          type="text"
+          {...register("text", {
             required: {
               value: true,
-              message: "Email is required",
+              message: "Campo requerido",
             },
           })}
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="user@email.com"
+          placeholder="descripcion del trabajo..."
         />
-        {errors.email && (
-          <span className="text-red-500 text-xs">{errors.email.message}</span>
-        )}
 
-        <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
-          Password:
+
+        <label htmlFor="Pago" className="text-slate-500 mb-2 block text-sm">
+          Pago del trabajo:
         </label>
         <input
-          type="password"
-          {...register("password", {
+          type="int"
+          {...register("int", {
             required: {
               value: true,
-              message: "Password is required",
+              message: "Campo requerido",
             },
           })}
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="********"
+          placeholder="$14.990"
         />
-        {errors.password && (
-          <span className="text-red-500 text-sm">
-            {errors.password.message}
-          </span>
-        )}
 
-        <label
-          htmlFor="confirmPassword"
-          className="text-slate-500 mb-2 block text-sm"
-        >
-          Confirm Password:
+
+<label htmlFor="fecha_comienzo" className="text-slate-500 mb-2 block text-sm">
+          Fecha de inicio:
         </label>
         <input
-          type="password"
-          {...register("confirmPassword", {
+          type="date"
+          {...register("date", {
             required: {
               value: true,
-              message: "Confirm Password is required",
+              message: "Campo requerido",
             },
           })}
           className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="********"
+          placeholder="11/22/2023"
         />
-        {errors.confirmPassword && (
-          <span className="text-red-500 text-sm">
-            {errors.confirmPassword.message}
-          </span>
-        )}
+
+
+<label htmlFor="fecha_final" className="text-slate-500 mb-2 block text-sm">
+          Fecha final:
+        </label>
+        <input
+          type="date"
+          {...register("date", {
+            required: {
+              value: true,
+              message: "Campo requerido",
+            },
+          })}
+          className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
+          placeholder="11/22/2023"
+        />
+
 
         <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-          Register
+          Publicar trabajo
         </button>
       </form>
+      
     </div>
   );
 }
+
+
 export default RegisterPage;
